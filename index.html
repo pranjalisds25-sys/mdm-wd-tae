@@ -1,0 +1,2338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NutriRecipe - Digital Nutrition Calculator</title>
+
+<style>
+
+/* =====================================================
+   GOOGLE-LIKE FONT
+===================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fffaf5;
+    color: #252525;
+    overflow-x: hidden;
+}
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+:root {
+    --orange: #ff7a18;
+    --orange-light: #ffb347;
+
+    --pink: #ff4d8d;
+    --purple: #8e44ad;
+
+    --green: #19b37d;
+    --blue: #3498db;
+
+    --yellow: #ffc107;
+
+    --dark: #202124;
+    --white: #ffffff;
+
+    --shadow:
+        0 15px 40px rgba(0,0,0,0.08);
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header {
+    height: 75px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 7%;
+
+    background: rgba(255,255,255,0.9);
+
+    backdrop-filter: blur(15px);
+
+    position: sticky;
+    top: 0;
+
+    z-index: 999;
+
+    box-shadow:
+        0 5px 25px rgba(0,0,0,0.06);
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+
+    color: var(--orange);
+}
+
+.logo span {
+    color: var(--pink);
+}
+
+nav {
+    display: flex;
+    gap: 28px;
+}
+
+nav a {
+    text-decoration: none;
+
+    color: #333;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    position: relative;
+
+    transition: 0.3s;
+}
+
+nav a::after {
+    content: "";
+
+    position: absolute;
+
+    width: 0;
+    height: 3px;
+
+    left: 0;
+    bottom: -7px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--orange),
+            var(--pink)
+        );
+
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: var(--orange);
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero {
+    min-height: 600px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 70px 8%;
+
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            #ffe5c7,
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 90% 80%,
+            #ffd9ec,
+            transparent 30%
+        ),
+
+        linear-gradient(
+            135deg,
+            #fff8ef,
+            #fff
+        );
+}
+
+.hero-content {
+    max-width: 650px;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+.badge {
+    display: inline-block;
+
+    padding: 8px 18px;
+
+    background: #fff;
+
+    color: var(--orange);
+
+    border-radius: 50px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    box-shadow: var(--shadow);
+
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: clamp(40px, 6vw, 75px);
+
+    line-height: 1.05;
+
+    font-weight: 800;
+
+    margin-bottom: 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff6b00,
+            #ff4081,
+            #8e44ad
+        );
+
+    -webkit-background-clip: text;
+
+    color: transparent;
+}
+
+.hero p {
+    font-size: 18px;
+
+    line-height: 1.8;
+
+    color: #666;
+
+    margin-bottom: 30px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.btn {
+    display: inline-block;
+
+    padding: 14px 25px;
+
+    border-radius: 50px;
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+    transition: 0.3s;
+}
+
+.primary-btn {
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--orange),
+            var(--pink)
+        );
+
+    box-shadow:
+        0 10px 25px rgba(255,100,50,0.3);
+}
+
+.primary-btn:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 15px 35px rgba(255,100,50,0.4);
+}
+
+.secondary-btn {
+    background: white;
+
+    color: #333;
+
+    border: 2px solid #eee;
+}
+
+.secondary-btn:hover {
+    border-color: var(--orange);
+
+    color: var(--orange);
+
+    transform: translateY(-5px);
+}
+
+
+/* =====================================================
+   FLOATING FOOD
+===================================================== */
+
+.food {
+    position: absolute;
+
+    font-size: 70px;
+
+    animation: float 5s ease-in-out infinite;
+}
+
+.food1 {
+    right: 15%;
+    top: 15%;
+}
+
+.food2 {
+    right: 5%;
+    bottom: 20%;
+    animation-delay: 1s;
+}
+
+.food3 {
+    right: 35%;
+    bottom: 8%;
+    animation-delay: 2s;
+}
+
+.food4 {
+    left: 3%;
+    bottom: 10%;
+    animation-delay: 3s;
+}
+
+@keyframes float {
+
+    0%,100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-25px) rotate(8deg);
+    }
+}
+
+
+/* =====================================================
+   CONTAINER
+===================================================== */
+
+.container {
+    width: 90%;
+
+    max-width: 1250px;
+
+    margin: auto;
+}
+
+
+/* =====================================================
+   SECTION TITLE
+===================================================== */
+
+.section-title {
+    text-align: center;
+
+    margin: 70px 0 40px;
+}
+
+.section-title h2 {
+    font-size: 38px;
+
+    font-weight: 800;
+}
+
+.section-title p {
+    color: #777;
+
+    margin-top: 10px;
+}
+
+
+/* =====================================================
+   FEATURE CARDS
+===================================================== */
+
+.features {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap: 22px;
+}
+
+.feature-card {
+    padding: 30px;
+
+    border-radius: 25px;
+
+    background: white;
+
+    box-shadow: var(--shadow);
+
+    transition: 0.4s;
+
+    border: 1px solid #f2f2f2;
+}
+
+.feature-card:hover {
+    transform:
+        translateY(-10px)
+        rotate(1deg);
+
+    box-shadow:
+        0 20px 45px rgba(0,0,0,0.12);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    font-size: 30px;
+
+    margin-bottom: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff0e2,
+            #ffe2ed
+        );
+}
+
+.feature-card h3 {
+    margin-bottom: 10px;
+}
+
+.feature-card p {
+    color: #777;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+
+/* =====================================================
+   CALCULATOR AREA
+===================================================== */
+
+.calculator {
+    margin-top: 80px;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1.5fr;
+
+    gap: 30px;
+
+    align-items: start;
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.card {
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 28px;
+
+    box-shadow: var(--shadow);
+
+    border: 1px solid #f0f0f0;
+}
+
+.card-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 25px;
+}
+
+.card-title span {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffeddc,
+            #ffe0ed
+        );
+
+    border-radius: 14px;
+
+    font-size: 23px;
+}
+
+.card-title h2 {
+    font-size: 21px;
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+input,
+select {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border-radius: 14px;
+
+    border: 2px solid #eee;
+
+    outline: none;
+
+    font-family: inherit;
+
+    transition: 0.3s;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--orange);
+
+    box-shadow:
+        0 0 0 4px rgba(255,122,24,0.1);
+}
+
+
+/* =====================================================
+   INGREDIENT SELECTOR
+===================================================== */
+
+.ingredient-selector {
+    display: grid;
+
+    grid-template-columns:
+        1fr 100px 100px;
+
+    gap: 10px;
+
+    align-items: end;
+}
+
+.add-btn {
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    color: white;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--orange),
+            var(--pink)
+        );
+}
+
+
+/* =====================================================
+   INGREDIENT LIST
+===================================================== */
+
+.ingredient-list {
+    margin-top: 25px;
+}
+
+.ingredient {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 14px;
+
+    border-radius: 15px;
+
+    background: #fff8f2;
+
+    margin-bottom: 10px;
+
+    transition: 0.3s;
+}
+
+.ingredient:hover {
+    transform: translateX(5px);
+
+    background: #fff0e6;
+}
+
+.ingredient-left {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+.ingredient-icon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: white;
+
+    font-size: 22px;
+}
+
+.ingredient small {
+    color: #888;
+}
+
+
+/* =====================================================
+   NUTRITION DASHBOARD
+===================================================== */
+
+.nutrition-dashboard {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap: 15px;
+}
+
+.nutrition-box {
+    padding: 25px;
+
+    border-radius: 22px;
+
+    color: white;
+
+    position: relative;
+
+    overflow: hidden;
+
+    transition: 0.3s;
+}
+
+.nutrition-box:hover {
+    transform: scale(1.04);
+}
+
+.nutrition-box::after {
+    content: "";
+
+    width: 100px;
+    height: 100px;
+
+    position: absolute;
+
+    right: -30px;
+    top: -30px;
+
+    background: rgba(255,255,255,0.15);
+
+    border-radius: 50%;
+}
+
+.calories {
+    background:
+        linear-gradient(
+            135deg,
+            #ff6b35,
+            #ff9f43
+        );
+}
+
+.protein {
+    background:
+        linear-gradient(
+            135deg,
+            #3498db,
+            #6c5ce7
+        );
+}
+
+.carbs {
+    background:
+        linear-gradient(
+            135deg,
+            #19b37d,
+            #2ecc71
+        );
+}
+
+.fat {
+    background:
+        linear-gradient(
+            135deg,
+            #ff4d8d,
+            #c44569
+        );
+}
+
+.nutrition-box .emoji {
+    font-size: 28px;
+}
+
+.nutrition-box h3 {
+    font-size: 30px;
+
+    margin-top: 10px;
+}
+
+.nutrition-box p {
+    opacity: 0.9;
+
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   MACRO PROGRESS
+===================================================== */
+
+.macro-section {
+    margin-top: 30px;
+}
+
+.macro {
+    margin-bottom: 18px;
+}
+
+.macro-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+.progress {
+    height: 12px;
+
+    background: #eee;
+
+    border-radius: 50px;
+
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+
+    border-radius: 50px;
+
+    animation: progressAnimation 2s ease;
+}
+
+.orange {
+    width: 75%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff7a18,
+            #ffb347
+        );
+}
+
+.green {
+    width: 60%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #19b37d,
+            #2ecc71
+        );
+}
+
+.blue {
+    width: 45%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #3498db,
+            #6c5ce7
+        );
+}
+
+@keyframes progressAnimation {
+
+    from {
+        width: 0;
+    }
+}
+
+
+/* =====================================================
+   DAILY TARGET
+===================================================== */
+
+.daily-target {
+    margin-top: 30px;
+
+    padding: 25px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f5edff,
+            #fff0f6
+        );
+}
+
+.target-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 12px;
+
+    font-weight: 700;
+}
+
+.target-progress {
+    height: 18px;
+
+    border-radius: 50px;
+
+    background: #ddd;
+
+    overflow: hidden;
+}
+
+.target-fill {
+    width: 65%;
+
+    height: 100%;
+
+    border-radius: 50px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #8e44ad,
+            #ff4d8d
+        );
+
+    animation:
+        targetAnimation 2s ease;
+}
+
+@keyframes targetAnimation {
+
+    from {
+        width: 0;
+    }
+}
+
+
+/* =====================================================
+   RECOMMENDATION
+===================================================== */
+
+.recommendation {
+    margin-top: 25px;
+
+    padding: 20px;
+
+    border-radius: 18px;
+
+    border-left: 5px solid var(--green);
+
+    background: #edfff8;
+}
+
+.recommendation h3 {
+    margin-bottom: 7px;
+
+    color: var(--green);
+}
+
+.recommendation p {
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    color: #555;
+}
+
+
+/* =====================================================
+   SAMPLE RECIPES
+===================================================== */
+
+.recipes {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap: 25px;
+}
+
+.recipe-card {
+    background: white;
+
+    border-radius: 25px;
+
+    overflow: hidden;
+
+    box-shadow: var(--shadow);
+
+    transition: 0.4s;
+}
+
+.recipe-card:hover {
+    transform:
+        translateY(-10px);
+}
+
+.recipe-image {
+    height: 190px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 80px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff0df,
+            #ffe2ef
+        );
+}
+
+.recipe-content {
+    padding: 22px;
+}
+
+.recipe-content h3 {
+    margin-bottom: 7px;
+}
+
+.recipe-content p {
+    color: #777;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+.recipe-info {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 15px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.recipe-info span:first-child {
+    color: var(--orange);
+}
+
+.recipe-info span:last-child {
+    color: var(--green);
+}
+
+
+/* =====================================================
+   NUTRITION TABLE
+===================================================== */
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 20px;
+}
+
+th {
+    background:
+        linear-gradient(
+            135deg,
+            #ff7a18,
+            #ff4d8d
+        );
+
+    color: white;
+
+    padding: 15px;
+
+    text-align: left;
+}
+
+td {
+    padding: 15px;
+
+    border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+    background: #fff8f2;
+}
+
+
+/* =====================================================
+   TIPS
+===================================================== */
+
+.tips {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap: 20px;
+}
+
+.tip {
+    padding: 25px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff,
+            #fff7f0
+        );
+
+    border: 1px solid #eee;
+
+    transition: 0.3s;
+}
+
+.tip:hover {
+    transform: translateY(-7px);
+
+    box-shadow: var(--shadow);
+}
+
+.tip-icon {
+    font-size: 35px;
+
+    margin-bottom: 15px;
+}
+
+.tip h3 {
+    margin-bottom: 8px;
+}
+
+.tip p {
+    color: #777;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+    margin-top: 100px;
+
+    padding: 60px 8% 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #241b2f,
+            #182c35
+        );
+
+    color: white;
+}
+
+.footer-content {
+    display: grid;
+
+    grid-template-columns:
+        2fr 1fr 1fr;
+
+    gap: 50px;
+}
+
+footer h2 {
+    color: #ff9f43;
+
+    margin-bottom: 15px;
+}
+
+footer p {
+    color: #bbb;
+
+    font-size: 13px;
+
+    line-height: 1.8;
+}
+
+footer a {
+    display: block;
+
+    color: #bbb;
+
+    text-decoration: none;
+
+    margin-bottom: 10px;
+
+    font-size: 13px;
+
+    transition: 0.3s;
+}
+
+footer a:hover {
+    color: #ff9f43;
+
+    padding-left: 5px;
+}
+
+.copyright {
+    text-align: center;
+
+    border-top: 1px solid #444;
+
+    margin-top: 40px;
+
+    padding-top: 25px;
+
+    color: #888;
+
+    font-size: 12px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:1000px) {
+
+    .features {
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .calculator {
+        grid-template-columns: 1fr;
+    }
+
+    .recipes {
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .tips {
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+}
+
+
+@media(max-width:700px) {
+
+    header {
+        padding: 0 5%;
+    }
+
+    nav {
+        display: none;
+    }
+
+    .hero {
+        text-align: center;
+
+        padding:
+            70px 20px;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+
+        flex-wrap: wrap;
+    }
+
+    .food {
+        opacity: 0.25;
+
+        font-size: 50px;
+    }
+
+    .features,
+    .recipes,
+    .tips {
+        grid-template-columns: 1fr;
+    }
+
+    .nutrition-dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .ingredient-selector {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+    <div class="logo">
+        🍴 Nutri<span>Recipe</span>
+    </div>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#calculator">Calculator</a>
+        <a href="#recipes">Recipes</a>
+        <a href="#tips">Nutrition Tips</a>
+    </nav>
+
+</header>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <span class="badge">
+            ✨ SMART FOOD • SMART HEALTH
+        </span>
+
+        <h1>
+            Eat Smart.<br>
+            Live Better.
+        </h1>
+
+        <p>
+            Discover the nutritional value of your favorite
+            recipes and create healthier meals with our
+            digital nutrition calculator.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#calculator"
+               class="btn primary-btn">
+                🧮 Start Calculating
+            </a>
+
+            <a href="#recipes"
+               class="btn secondary-btn">
+                🍳 Explore Recipes
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Floating Food -->
+
+    <div class="food food1">🥑</div>
+
+    <div class="food food2">🍓</div>
+
+    <div class="food food3">🥕</div>
+
+    <div class="food food4">🍎</div>
+
+</section>
+
+
+<!-- =====================================================
+     FEATURES
+===================================================== -->
+
+<div class="container">
+
+<section>
+
+<div class="section-title">
+
+    <h2>Why Use NutriRecipe?</h2>
+
+    <p>
+        Everything you need to understand your food better.
+    </p>
+
+</div>
+
+
+<div class="features">
+
+
+<div class="feature-card">
+
+    <div class="feature-icon">
+        🧮
+    </div>
+
+    <h3>
+        Nutrition Calculator
+    </h3>
+
+    <p>
+        Calculate calories, proteins,
+        carbohydrates, fats and fiber
+        in your meals.
+    </p>
+
+</div>
+
+
+<div class="feature-card">
+
+    <div class="feature-icon">
+        🥗
+    </div>
+
+    <h3>
+        Healthy Recipes
+    </h3>
+
+    <p>
+        Explore delicious recipes designed
+        to help you maintain a balanced diet.
+    </p>
+
+</div>
+
+
+<div class="feature-card">
+
+    <div class="feature-icon">
+        📊
+    </div>
+
+    <h3>
+        Nutrition Dashboard
+    </h3>
+
+    <p>
+        Understand your macro nutrients
+        using colorful visual indicators.
+    </p>
+
+</div>
+
+
+<div class="feature-card">
+
+    <div class="feature-icon">
+        🎯
+    </div>
+
+    <h3>
+        Daily Goals
+    </h3>
+
+    <p>
+        Compare your meal's calories
+        with your daily nutritional target.
+    </p>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     CALCULATOR
+===================================================== -->
+
+<section id="calculator">
+
+<div class="section-title">
+
+    <h2>Digital Nutrition Calculator</h2>
+
+    <p>
+        Build your recipe and understand its nutrition.
+    </p>
+
+</div>
+
+
+<div class="calculator">
+
+
+<!-- LEFT SIDE -->
+
+<div class="card">
+
+    <div class="card-title">
+
+        <span>🍳</span>
+
+        <h2>Build Your Recipe</h2>
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Recipe Name
+        </label>
+
+        <input
+            type="text"
+            placeholder="Example: Healthy Chicken Bowl"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Number of Servings
+        </label>
+
+        <input
+            type="number"
+            value="2"
+            min="1"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Daily Calorie Target
+        </label>
+
+        <input
+            type="number"
+            value="2000"
+        >
+
+    </div>
+
+
+    <div class="card-title">
+
+        <span>🥕</span>
+
+        <h2>Add Ingredients</h2>
+
+    </div>
+
+
+    <div class="ingredient-selector">
+
+        <select>
+
+            <option>🍚 Rice</option>
+
+            <option>🍗 Chicken Breast</option>
+
+            <option>🥚 Egg</option>
+
+            <option>🥛 Milk</option>
+
+            <option>🍌 Banana</option>
+
+            <option>🍎 Apple</option>
+
+            <option>🥔 Potato</option>
+
+            <option>🍅 Tomato</option>
+
+            <option>🧀 Paneer</option>
+
+            <option>🥣 Oats</option>
+
+            <option>🌰 Almonds</option>
+
+        </select>
+
+
+        <input
+            type="number"
+            placeholder="grams"
+            value="100"
+        >
+
+
+        <button class="add-btn">
+            + Add
+        </button>
+
+    </div>
+
+
+    <div class="ingredient-list">
+
+
+        <div class="ingredient">
+
+            <div class="ingredient-left">
+
+                <div class="ingredient-icon">
+                    🍚
+                </div>
+
+                <div>
+
+                    <strong>
+                        Rice
+                    </strong>
+
+                    <br>
+
+                    <small>
+                        150 grams
+                    </small>
+
+                </div>
+
+            </div>
+
+            <strong>
+                195 kcal
+            </strong>
+
+        </div>
+
+
+        <div class="ingredient">
+
+            <div class="ingredient-left">
+
+                <div class="ingredient-icon">
+                    🍗
+                </div>
+
+                <div>
+
+                    <strong>
+                        Chicken Breast
+                    </strong>
+
+                    <br>
+
+                    <small>
+                        100 grams
+                    </small>
+
+                </div>
+
+            </div>
+
+            <strong>
+                165 kcal
+            </strong>
+
+        </div>
+
+
+        <div class="ingredient">
+
+            <div class="ingredient-left">
+
+                <div class="ingredient-icon">
+                    🥕
+                </div>
+
+                <div>
+
+                    <strong>
+                        Vegetables
+                    </strong>
+
+                    <br>
+
+                    <small>
+                        100 grams
+                    </small>
+
+                </div>
+
+            </div>
+
+            <strong>
+                65 kcal
+            </strong>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- RIGHT SIDE -->
+
+<div class="card">
+
+    <div class="card-title">
+
+        <span>📊</span>
+
+        <h2>Nutrition Dashboard</h2>
+
+    </div>
+
+
+    <div class="nutrition-dashboard">
+
+
+        <div class="nutrition-box calories">
+
+            <div class="emoji">
+                🔥
+            </div>
+
+            <h3>
+                425
+            </h3>
+
+            <p>
+                Calories
+            </p>
+
+        </div>
+
+
+        <div class="nutrition-box protein">
+
+            <div class="emoji">
+                💪
+            </div>
+
+            <h3>
+                32g
+            </h3>
+
+            <p>
+                Protein
+            </p>
+
+        </div>
+
+
+        <div class="nutrition-box carbs">
+
+            <div class="emoji">
+                🌾
+            </div>
+
+            <h3>
+                48g
+            </h3>
+
+            <p>
+                Carbohydrates
+            </p>
+
+        </div>
+
+
+        <div class="nutrition-box fat">
+
+            <div class="emoji">
+                🥑
+            </div>
+
+            <h3>
+                12g
+            </h3>
+
+            <p>
+                Fat
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- MACROS -->
+
+    <div class="macro-section">
+
+        <h3>
+            Macronutrient Balance
+        </h3>
+
+        <br>
+
+
+        <div class="macro">
+
+            <div class="macro-header">
+
+                <span>
+                    Protein
+                </span>
+
+                <span>
+                    75%
+                </span>
+
+            </div>
+
+            <div class="progress">
+
+                <div class="progress-fill orange">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="macro">
+
+            <div class="macro-header">
+
+                <span>
+                    Carbohydrates
+                </span>
+
+                <span>
+                    60%
+                </span>
+
+            </div>
+
+            <div class="progress">
+
+                <div class="progress-fill green">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="macro">
+
+            <div class="macro-header">
+
+                <span>
+                    Fat
+                </span>
+
+                <span>
+                    45%
+                </span>
+
+            </div>
+
+            <div class="progress">
+
+                <div class="progress-fill blue">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- DAILY TARGET -->
+
+    <div class="daily-target">
+
+        <div class="target-header">
+
+            <span>
+                🎯 Daily Calorie Goal
+            </span>
+
+            <span>
+                425 / 2000 kcal
+            </span>
+
+        </div>
+
+        <div class="target-progress">
+
+            <div class="target-fill">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RECOMMENDATION -->
+
+    <div class="recommendation">
+
+        <h3>
+            💡 Nutrition Recommendation
+        </h3>
+
+        <p>
+            This recipe provides a good amount of protein
+            and carbohydrates. Add more vegetables or
+            salad to increase fiber and micronutrients.
+        </p>
+
+    </div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     SAMPLE RECIPES
+===================================================== -->
+
+<section id="recipes">
+
+<div class="section-title">
+
+    <h2>🍽️ Popular Healthy Recipes</h2>
+
+    <p>
+        Delicious ideas for your next healthy meal.
+    </p>
+
+</div>
+
+
+<div class="recipes">
+
+
+<div class="recipe-card">
+
+    <div class="recipe-image">
+        🥗
+    </div>
+
+    <div class="recipe-content">
+
+        <h3>
+            Fresh Green Salad
+        </h3>
+
+        <p>
+            A refreshing combination of vegetables,
+            greens and healthy toppings.
+        </p>
+
+        <div class="recipe-info">
+
+            <span>
+                🔥 220 kcal
+            </span>
+
+            <span>
+                💪 8g Protein
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="recipe-card">
+
+    <div class="recipe-image">
+        🍗
+    </div>
+
+    <div class="recipe-content">
+
+        <h3>
+            Protein Chicken Bowl
+        </h3>
+
+        <p>
+            High-protein chicken combined with rice
+            and colorful vegetables.
+        </p>
+
+        <div class="recipe-info">
+
+            <span>
+                🔥 480 kcal
+            </span>
+
+            <span>
+                💪 38g Protein
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="recipe-card">
+
+    <div class="recipe-image">
+        🥣
+    </div>
+
+    <div class="recipe-content">
+
+        <h3>
+            Power Oatmeal
+        </h3>
+
+        <p>
+            Nutritious oats with banana, almonds
+            and fresh fruits.
+        </p>
+
+        <div class="recipe-info">
+
+            <span>
+                🔥 350 kcal
+            </span>
+
+            <span>
+                💪 12g Protein
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     NUTRITION TABLE
+===================================================== -->
+
+<section>
+
+<div class="section-title">
+
+    <h2>📋 Nutrition Breakdown</h2>
+
+    <p>
+        Example nutritional information for ingredients.
+    </p>
+
+</div>
+
+
+<div class="card table-wrapper">
+
+<table>
+
+<tr>
+
+    <th>
+        Ingredient
+    </th>
+
+    <th>
+        Quantity
+    </th>
+
+    <th>
+        Calories
+    </th>
+
+    <th>
+        Protein
+    </th>
+
+    <th>
+        Carbs
+    </th>
+
+    <th>
+        Fat
+    </th>
+
+</tr>
+
+
+<tr>
+
+    <td>🍚 Rice</td>
+
+    <td>150g</td>
+
+    <td>195 kcal</td>
+
+    <td>4g</td>
+
+    <td>42g</td>
+
+    <td>0.5g</td>
+
+</tr>
+
+
+<tr>
+
+    <td>🍗 Chicken</td>
+
+    <td>100g</td>
+
+    <td>165 kcal</td>
+
+    <td>31g</td>
+
+    <td>0g</td>
+
+    <td>3.6g</td>
+
+</tr>
+
+
+<tr>
+
+    <td>🍅 Tomato</td>
+
+    <td>100g</td>
+
+    <td>18 kcal</td>
+
+    <td>0.9g</td>
+
+    <td>3.9g</td>
+
+    <td>0.2g</td>
+
+</tr>
+
+
+<tr>
+
+    <td>🥕 Vegetables</td>
+
+    <td>100g</td>
+
+    <td>65 kcal</td>
+
+    <td>2g</td>
+
+    <td>12g</td>
+
+    <td>1g</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     TIPS
+===================================================== -->
+
+<section id="tips">
+
+<div class="section-title">
+
+    <h2>💚 Smart Nutrition Tips</h2>
+
+    <p>
+        Small changes can make your meals healthier.
+    </p>
+
+</div>
+
+
+<div class="tips">
+
+
+<div class="tip">
+
+    <div class="tip-icon">
+        💧
+    </div>
+
+    <h3>
+        Stay Hydrated
+    </h3>
+
+    <p>
+        Drink enough water throughout the day
+        to support digestion and overall health.
+    </p>
+
+</div>
+
+
+<div class="tip">
+
+    <div class="tip-icon">
+        🥦
+    </div>
+
+    <h3>
+        Eat More Vegetables
+    </h3>
+
+    <p>
+        Include colorful vegetables in your meals
+        to increase vitamins, minerals and fiber.
+    </p>
+
+</div>
+
+
+<div class="tip">
+
+    <div class="tip-icon">
+        🥜
+    </div>
+
+    <h3>
+        Choose Healthy Fats
+    </h3>
+
+    <p>
+        Nuts, seeds and healthy oils can provide
+        beneficial fats when consumed appropriately.
+    </p>
+
+</div>
+
+
+</div>
+
+</section>
+
+</div>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+<div class="footer-content">
+
+
+<div>
+
+    <h2>
+        🍴 NutriRecipe
+    </h2>
+
+    <p>
+        A digital recipe nutritional calculator designed
+        to help users understand the nutritional value
+        of their meals and make smarter food choices.
+    </p>
+
+</div>
+
+
+<div>
+
+    <h3>
+        Quick Links
+    </h3>
+
+    <br>
+
+    <a href="#home">
+        Home
+    </a>
+
+    <a href="#calculator">
+        Calculator
+    </a>
+
+    <a href="#recipes">
+        Recipes
+    </a>
+
+    <a href="#tips">
+        Nutrition Tips
+    </a>
+
+</div>
+
+
+<div>
+
+    <h3>
+        Features
+    </h3>
+
+    <br>
+
+    <a href="#">
+        Nutrition Analysis
+    </a>
+
+    <a href="#">
+        Calorie Tracking
+    </a>
+
+    <a href="#">
+        Macro Analysis
+    </a>
+
+    <a href="#">
+        Healthy Recipes
+    </a>
+
+</div>
+
+
+</div>
+
+
+<div class="copyright">
+
+    © 2026 NutriRecipe | Digital Recipe Nutritional Calculator
+
+</div>
+
+</footer>
+
+
+</body>
+</html>
